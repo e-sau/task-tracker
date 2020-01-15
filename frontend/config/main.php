@@ -11,6 +11,7 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'defaultRoute' => 'task/index',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
@@ -36,11 +37,19 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'formatter' => [
+            'dateFormat' => 'php:d.m.Y',
+            'datetimeFormat' => 'php:d.m.Y H:i:s',
+        ],
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'task/<id:\d+>'=>'task/view'
             ],
+        ],
+        'chatComponent' => [
+            'class' => 'frontend\components\Chat',
         ],
     ],
     'params' => $params,
