@@ -66,6 +66,8 @@ AppAsset::register($this);
         ]) ?>
         <?= Alert::widget() ?>
         <?= $content ?>
+
+        <?php if (Yii::$app->controller->id === 'task') Yii::$app->chatComponent->showChat(); ?>
     </div>
 </div>
 
@@ -76,7 +78,6 @@ AppAsset::register($this);
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
 </footer>
-
 <?php $this->endBody() ?>
 </body>
 </html>

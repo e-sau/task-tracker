@@ -31,11 +31,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'title',
-            'description',
-            'status',
-            'priority',
-            'created_at',
-            'updated_at',
+//            'status',
+            'description:ntext',
+            [
+                'attribute' => 'creator_id',
+                'label' => 'Creator',
+                'value' => function(\frontend\models\Task $model) {
+                    return \common\models\User::findIdentity($model->creator_id)->username;
+                }
+            ],
+            [
+                'attribute' => 'performer_id',
+                'label' => 'Performer',
+                'value' => function(\frontend\models\Task $model) {
+                    return \common\models\User::findIdentity($model->performer_id)->username;
+                }
+            ],
+            'created_at:datetime',
+            'updated_at:datetime',
         ],
     ]) ?>
 

@@ -19,11 +19,13 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'title') ?>
 
-    <?= $form->field($model, 'description') ?>
-
     <?= $form->field($model, 'status') ?>
 
-    <?= $form->field($model, 'priority') ?>
+    <?= $form->field($model, 'description') ?>
+
+    <?= $form->field($model, 'creator_id') ?>
+
+    <?php // echo $form->field($model, 'performer_id') ?>
 
     <?php // echo $form->field($model, 'created_at') ?>
 
