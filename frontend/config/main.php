@@ -51,6 +51,9 @@ return [
         'chatComponent' => [
             'class' => 'frontend\components\Chat',
         ],
+        'authManager' => [
+            'class' => \yii\rbac\DbManager::class
+        ]
     ],
     'params' => $params,
 ];
