@@ -99,17 +99,6 @@ class Task extends \yii\db\ActiveRecord
         ];
     }
 
-    public function beforeValidate()
-    {
-//        if (!empty($this->template_id)) {
-//            $template = $this->template;
-//            $this->title = $template->title;
-//            $this->description = $template->description;
-//        }
-
-        return parent::beforeValidate();
-    }
-
     public function getCreator()
     {
         return $this->hasOne(User::class, ['id' => 'creator_id']);
