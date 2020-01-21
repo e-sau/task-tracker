@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model frontend\models\Task */
+/* @var $model common\models\Task */
 
 $this->title = $model->title;
 $this->params['breadcrumbs'][] = ['label' => 'Tasks', 'url' => ['index']];
@@ -31,24 +31,29 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'title',
-//            'status',
-            'description:ntext',
             [
-                'attribute' => 'creator_id',
-                'label' => 'Creator',
-                'value' => function(\frontend\models\Task $model) {
-                    return \common\models\User::findIdentity($model->creator_id)->username;
+                'attribute' => 'status',
+                'value' => function(\common\models\Task $model) {
+                    return $model->getStatusTitle()[$model->status];
                 }
             ],
+            'description:ntext',
             [
-                'attribute' => 'performer_id',
-                'label' => 'Performer',
-                'value' => function(\frontend\models\Task $model) {
-                    return \common\models\User::findIdentity($model->performer_id)->username;
-                }
+                'attribute' => 'creator.username',
+                'label' => 'Creator'
+            ],
+            [
+                'attribute' => 'performer.username',
+                'label' => 'Performer'
+            ],
+            [
+                'attribute' => 'priority.title',
+                'label' => 'Priority'
             ],
             'created_at:datetime',
             'updated_at:datetime',
+            'is_template:boolean'
+
         ],
     ]) ?>
 

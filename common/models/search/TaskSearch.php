@@ -1,13 +1,13 @@
 <?php
 
-namespace frontend\models\search;
+namespace common\models\search;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use frontend\models\Task;
+use common\models\Task;
 
 /**
- * TaskSearch represents the model behind the search form of `frontend\models\Task`.
+ * TaskSearch represents the model behind the search form of `common\models\Task`.
  */
 class TaskSearch extends Task
 {

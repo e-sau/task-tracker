@@ -2,13 +2,16 @@
 
 namespace frontend\controllers;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Yii;
-use frontend\models\Task;
-use frontend\models\search\TaskSearch;
+use common\models\Task;
+use common\models\search\TaskSearch;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * TaskController implements the CRUD actions for Task model.
@@ -79,9 +82,13 @@ class TaskController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         }
+
+        $templates = Task::find()->andWhere(['is_template' => true])->all();
+        $templates = ArrayHelper::map($templates, 'id', 'title');
       
         return $this->render('create', [
             'model' => $model,
+            'templates' => $templates
         ]);
     }
 
@@ -100,8 +107,12 @@ class TaskController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        $templates = Task::find()->andWhere(['is_template' => true])->all();
+        $templates = ArrayHelper::map($templates, 'id', 'title');
+
         return $this->render('update', [
             'model' => $model,
+            'templates' => $templates
         ]);
     }
 
@@ -135,5 +146,16 @@ class TaskController extends Controller
         }
 
         throw new NotFoundHttpException('The requested page does not exist.');
+    }
+
+    public function actionGetTemplate()
+    {
+        $template_id = Yii::$app->request->post('template_id');
+        $task = new Task();
+        $task->template_id = $template_id;
+        $template = $task->template;
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return $template ?: ['error' => 'Template is not exist'];
     }
 }
