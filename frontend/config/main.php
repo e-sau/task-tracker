@@ -11,7 +11,7 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
-    'defaultRoute' => 'task/index',
+    'defaultRoute' => 'project/index',
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
@@ -45,6 +45,7 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'project/<id:\d+>'=>'project/view',
                 'task/<id:\d+>'=>'task/view'
             ],
         ],
