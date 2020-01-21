@@ -4,17 +4,23 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model frontend\models\Task */
+/* @var $model common\models\Task */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $templates array */
 ?>
 
 <div class="task-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->field($model, 'template_id')->dropDownList(
+        $templates,
+        ['prompt' => 'No template']
+    ) ?>
+
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?php //$form->field($model, 'status')->textInput() ?>
+    <?= $form->field($model, 'status')->dropDownList($model->getStatusTitle()) ?>
 
     <?= $form->field($model, 'description')->textarea(['rows' => 6]) ?>
 
@@ -28,6 +34,13 @@ use yii\widgets\ActiveForm;
     <?php //$form->field($model, 'created_at')->textInput() ?>
 
     <?php //$form->field($model, 'updated_at')->textInput() ?>
+
+    <?= $form->field($model, 'priority_id')->label('Priority')->dropDownList(
+        \yii\helpers\ArrayHelper::map(\common\models\Priority::find()->all(), 'id', 'title'),
+        ['prompt' => 'Choose priority']
+    ) ?>
+
+    <?= $form->field($model, 'is_template')->checkbox() ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
