@@ -2,6 +2,8 @@
 
 namespace frontend\models;
 
+use common\models\Project;
+use common\models\Task;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
@@ -14,6 +16,8 @@ use yii\behaviors\TimestampBehavior;
  * @property int|null $updated_at
  * @property string|null $message
  * @property int|null $type
+ * @property int|null $task_id
+ * @property int|null $project_id
  */
 class ChatLog extends \yii\db\ActiveRecord
 {
@@ -35,10 +39,19 @@ class ChatLog extends \yii\db\ActiveRecord
     public function rules()
     {
         $rules = [
-            [['created_at', 'updated_at', 'type'], 'integer'],
+            [['created_at', 'updated_at', 'type', 'task_id', 'project_id'], 'integer'],
             [['username', 'type'], 'required'],
             [['message'], 'string'],
             [['username'], 'string', 'max' => 255],
+            [['task_id'], 'exist', 'skipOnError' => true,
+                'targetClass' => Task::class,
+                'targetAttribute' => ['task_id' => 'id']
+            ],
+            [['project_id'], 'exist', 'skipOnError' => true,
+                'targetClass' => Project::class,
+                'targetAttribute' => ['project_id' => 'id']
+            ],
+
         ];
 
         if ($this->type == self::SEND_MESSAGE) {
@@ -82,7 +95,9 @@ class ChatLog extends \yii\db\ActiveRecord
             $model = new self([
                 'username' => $data['username'],
                 'message' => $data['message'],
-                'type' => $data['type']
+                'type' => $data['type'],
+                'task_id' => $data['task_id'],
+                'project_id' => $data['project_id']
             ]);
             if ($model->save()) {
                 return true;

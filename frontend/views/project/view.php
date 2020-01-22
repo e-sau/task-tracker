@@ -86,3 +86,4 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
 
 </div>
+<?= \frontend\widgets\chat\Chat::widget(['project_id' => $model->id]) ?>
