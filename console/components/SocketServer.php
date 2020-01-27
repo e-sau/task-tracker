@@ -23,28 +23,54 @@ class SocketServer implements MessageComponentInterface
     /**
      * @param ConnectionInterface $from
      * @param string $msg
+     * @throws \yii\base\InvalidConfigException
      */
     public function onMessage(ConnectionInterface $from, $msg)
     {
         $msgArray = json_decode($msg, true);
 
         if ($msgArray['type'] === ChatLog::SHOW_HISTORY) {
-            $this->showHistory($from);
+            $this->showHistory($from, $msgArray);
         } else {
             ChatLog::create($msgArray);
             foreach ($this->clients as $client) {
-                $client->send($msg);
+                $msgArray['created_at'] = \Yii::$app->formatter->format(time(), [
+                    'datetime', 'php:d.m.Y H:i:s'
+                ]);
+                /**
+                 * @var ConnectionInterface $client
+                 */
+                $this->sendMessage($client, $msgArray);
             }
         }
     }
-    private function showHistory(ConnectionInterface $conn)
+
+    /**
+     * @param ConnectionInterface $conn
+     * @param array $msg
+     * @throws \yii\base\InvalidConfigException
+     */
+    private function showHistory(ConnectionInterface $conn, array $msg)
     {
         $chatLogsQuery = ChatLog::find()->orderBy('created_at ASC');
+
+        if (isset($msg['task_id'])) {
+            $chatLogsQuery->andWhere(['task_id' => (int)$msg['task_id']]);
+        }
+
+        if (isset($msg['project_id'])) {
+            $chatLogsQuery->andWhere(['project_id' => (int)$msg['project_id']]);
+        }
+
         foreach ($chatLogsQuery->each() as $chatLog) {
             /**
              * @var ChatLog $chatLog
              */
-            $this->sendMessage($conn, ['message'=>$chatLog->message, 'username'=>$chatLog->username]);
+            $this->sendMessage($conn, [
+                'created_at' => \Yii::$app->formatter->format($chatLog->created_at, ['datetime', 'php:d.m.Y H:i:s']),
+                'message'=>$chatLog->message,
+                'username'=>$chatLog->username
+            ]);
         }
     }
     /**

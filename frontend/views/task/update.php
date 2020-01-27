@@ -21,3 +21,4 @@ $this->params['breadcrumbs'][] = 'Update';
     ]) ?>
 
 </div>
+<?= \frontend\widgets\chat\Chat::widget(['task_id' => $model->id]) ?>
