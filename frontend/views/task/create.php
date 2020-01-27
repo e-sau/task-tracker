@@ -19,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
     ]) ?>
 
 </div>
-
+<?= \frontend\widgets\chat\Chat::widget() ?>
 <?php
 
 $this->registerJs("
