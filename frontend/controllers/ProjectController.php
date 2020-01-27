@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\models\search\TaskSearch;
+use frontend\models\ChatLog;
 use Yii;
 use common\models\Project;
 use common\models\search\ProjectSearch;
@@ -75,6 +76,15 @@ class ProjectController extends Controller
         $model = new Project();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            ChatLog::create([
+                'created_at' => \Yii::$app->formatter->format(time(), [
+                    'datetime',
+                    'php:d.m.Y H:i:s'
+                ]),
+                'message' => "Project: '[{$model->id}]{$model->title}' was created!",
+                'username' => 'System',
+                'type' => ChatLog::SEND_MESSAGE
+            ]);
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -95,6 +105,15 @@ class ProjectController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            ChatLog::create([
+                'created_at' => \Yii::$app->formatter->format(time(), [
+                    'datetime',
+                    'php:d.m.Y H:i:s'
+                ]),
+                'message' => "Project: '[{$model->id}]{$model->title}' was updated!",
+                'username' => 'System',
+                'type' => ChatLog::SEND_MESSAGE
+            ]);
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

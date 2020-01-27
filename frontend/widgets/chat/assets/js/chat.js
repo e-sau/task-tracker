@@ -8,11 +8,12 @@ let SEND_MESSAGE = 2;
 chat.onmessage = function (e) {
   // console.log(e);
   let response = JSON.parse(e.data);
-  $('.chat__frame').append('<div>' +
+  let chat__frame = $('.chat__frame');
+  chat__frame.append('<div>' +
     (response.created_at ? '<span class="created_at">' + response.created_at + ' </span>' : '') +
     '<b>' + response.username + '</b>: ' + response.message + '</div>');
-  $('.chat__frame').animate({
-    scrollTop: $('.chat__frame').outerHeight(),
+  chat__frame.animate({
+    scrollTop: chat__frame.get(0).scrollHeight,
   }, 'fast');
 };
 
