@@ -50,6 +50,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'priority.title',
                 'label' => 'Priority'
             ],
+            [
+                'attribute' => 'project_id',
+                'label' => 'Project',
+                'value' => Html::a(\common\models\Project::findOne($model->project_id)->title,
+                    ['project/view', 'id' => $model->project_id]),
+                'format' => 'raw'
+            ],
             'created_at:datetime',
             'updated_at:datetime',
             'is_template:boolean'

@@ -19,10 +19,12 @@ use yii\behaviors\TimestampBehavior;
  * @property int $priority_id
  * @property bool $is_template
  * @property int|null $template_id
+ * @property int|null $project_id
  *
  * @property User $performer
  * @property Task $template
  * @property Priority $priority
+ * @property Project $project
  */
 class Task extends \yii\db\ActiveRecord
 {
@@ -45,7 +47,7 @@ class Task extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'performer_id', 'description', 'priority_id'], 'required'],
-            [['creator_id', 'performer_id', 'created_at', 'updated_at', 'template_id'], 'integer'],
+            [['creator_id', 'performer_id', 'created_at', 'updated_at', 'template_id', 'project_id'], 'integer'],
             [['description'], 'string'],
             [['is_template'], 'boolean'],
             ['status', 'default', 'value' => static::STATUS_ACTIVE],
@@ -54,7 +56,7 @@ class Task extends \yii\db\ActiveRecord
                 static::STATUS_IN_PROGRESS,
                 static::STATUS_DONE
             ]],
-            ['creator_id', 'default', 'value' => Yii::$app->user->id],
+            ['creator_id', 'default', 'value' => Yii::$app->user->identity->id],
             ['performer_id', 'exist', 'skipOnError' => true,
                 'targetClass' => User::class,
                 'targetAttribute' => ['performer_id' => 'id']
@@ -111,12 +113,17 @@ class Task extends \yii\db\ActiveRecord
 
     public function getPriority()
     {
-        return $this->hasOne(Priority::class, ['id' => 'priority_id']);
+        return $this->hasOne(Priority::class, ['id' => 'priority_id'])->where(['type' => Priority::TYPE_TASK]);
     }
 
     public function getTemplate()
     {
         return $this->hasOne(Task::class, ['id' => 'template_id']);
+    }
+
+    public function getProject()
+    {
+        return $this->hasOne(Project::class, ['id' => 'project_id']);
     }
 
     public function getStatusTitle()

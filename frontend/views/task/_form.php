@@ -36,8 +36,16 @@ use yii\widgets\ActiveForm;
     <?php //$form->field($model, 'updated_at')->textInput() ?>
 
     <?= $form->field($model, 'priority_id')->label('Priority')->dropDownList(
-        \yii\helpers\ArrayHelper::map(\common\models\Priority::find()->all(), 'id', 'title'),
+        \yii\helpers\ArrayHelper::map(\common\models\Priority::find()
+            ->where(['type' => \common\models\Priority::TYPE_TASK])
+            ->all(), 'id', 'title'),
         ['prompt' => 'Choose priority']
+    ) ?>
+
+    <?= $form->field($model, 'project_id')->label('Project')->dropDownList(
+        \yii\helpers\ArrayHelper::map(\common\models\Project::find()
+            ->all(), 'id', 'title'),
+        ['prompt' => 'Choose project']
     ) ?>
 
     <?= $form->field($model, 'is_template')->checkbox() ?>
