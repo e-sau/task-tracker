@@ -2,7 +2,7 @@
 
 namespace frontend\controllers;
 
-use Symfony\Component\HttpFoundation\JsonResponse;
+use frontend\models\ChatLog;
 use Yii;
 use common\models\Task;
 use common\models\search\TaskSearch;
@@ -80,6 +80,15 @@ class TaskController extends Controller
         $model = new Task();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            ChatLog::create([
+                'created_at' => \Yii::$app->formatter->format(time(), [
+                    'datetime',
+                    'php:d.m.Y H:i:s'
+                ]),
+                'message' => "Task: '[{$model->id}]{$model->title}' was created!",
+                'username' => 'System',
+                'type' => ChatLog::SEND_MESSAGE
+            ]);
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -104,6 +113,15 @@ class TaskController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            ChatLog::create([
+                'created_at' => \Yii::$app->formatter->format(time(), [
+                    'datetime',
+                    'php:d.m.Y H:i:s'
+                ]),
+                'message' => "Task: '[{$model->id}]{$model->title}' was updated!",
+                'username' => 'System',
+                'type' => ChatLog::SEND_MESSAGE
+            ]);
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
