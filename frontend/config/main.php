@@ -15,6 +15,9 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
+            'parsers' => [
+                'application/json' => \yii\web\JsonParser::class
+            ],
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -45,8 +48,17 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                'project/<id:\d+>'=>'project/view',
-                'task/<id:\d+>'=>'task/view'
+//                [
+//                    'project/<id:\d+>'=>'project/view',
+//                    'task/<id:\d+>'=>'task/view',
+//                ],
+                [
+                    'controller' => 'api/task',
+                    'class' => \yii\rest\UrlRule::class,
+                    'extraPatterns' => [
+                        'GET auth' => 'auth',
+                    ],
+                ]
             ],
         ],
         'chatComponent' => [
@@ -55,6 +67,11 @@ return [
         'authManager' => [
             'class' => \yii\rbac\DbManager::class
         ]
+    ],
+    'modules' => [
+        'api' => [
+            'class' => \frontend\modules\api\Module::class
+        ],
     ],
     'params' => $params,
 ];
