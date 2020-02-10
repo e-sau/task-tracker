@@ -66,7 +66,10 @@ return [
         ],
         'authManager' => [
             'class' => \yii\rbac\DbManager::class
-        ]
+        ],
+        'lastVisited' => [
+            'class' => \frontend\components\LastFiveVisitedTasks::class,
+        ],
     ],
     'modules' => [
         'api' => [
