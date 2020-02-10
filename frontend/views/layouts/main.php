@@ -68,6 +68,7 @@ AppAsset::register($this);
         ]) ?>
         <?= Alert::widget() ?>
         <?= $content ?>
+        <?= Yii::$app->lastVisited->show() ?>
     </div>
 </div>
 
